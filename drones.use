@@ -1,0 +1,38 @@
+model drones
+
+abstract class Location
+attributes
+  x : Integer
+  y : Integer
+end
+
+class Warehouse < Location end
+
+class Drone < Location
+attributes
+  energy : Integer
+end
+
+class Order end
+
+class Receptacle < Location end
+
+association Ownership between
+  Warehouse [1] role owner
+  Drone [*] role drones
+end
+
+association Storage between
+  Warehouse [0..1] role storagePlace
+  Drone [*] role storedDrones
+end
+
+association OrderPosition between
+  Order [*] role orders
+  Receptacle [1] role position
+end
+
+association OrderDrone between
+  Order [0..1] role order
+  Drone [1] role drone
+end
