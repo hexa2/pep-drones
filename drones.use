@@ -10,12 +10,15 @@ class Warehouse < Location end
 
 class Drone < Location
 attributes
-  energy : Integer
+  DCAP : Integer
 end
 
 class Order end
 
 class Receptacle < Location end
+attributes
+  RCAP : Integer
+end
 
 association Ownership between
   Warehouse [1] role owner
@@ -36,3 +39,13 @@ association OrderDrone between
   Order [0..1] role order
   Drone [1] role drone
 end
+
+constraints
+
+-- A un moment au plus un drone peut interagir avec un Receptacle
+-- Il existe au moins un Receptacle voisin de lentrepot
+— Pour chaque réceptacle, il existe un chemin partant de l’entrepôt et menant à
+ce réceptacle en passant par un ensemble d’autres réceptacles tel que la distance
+entre tout couple d’éléments consécutifs de ce chemin soit inférieure ou égale à 2.
+—- A un moment donne, il y a au plus un drone a chaque intersection de la grille.
+
