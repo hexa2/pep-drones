@@ -1,4 +1,3 @@
--- Init
 procedure init(gridWidth : Integer, gridHeight : Integer, DNB : Integer, RNB : Integer)
 var drones : Sequence(Drone),
     targets : Sequence(Target),
@@ -47,4 +46,21 @@ begin
     [drone].state := [DroneState::Boarding];
     [drone].isActing := [true];
   end;
+end;
+
+procedure newOrder()
+var product : Product,
+    order : Order,
+    target : Target;
+begin
+  order := Create(Order);
+  product := Create(Product);
+
+  [order].state := [OrderState::Waiting];
+  target := Any([Target.allInstances()->asSequence()]);
+  Insert(OrderLocation, [target], [order]);
+
+  [product].weight := [0];
+
+  Insert(CarriedProducts, [order], [product]);
 end;
