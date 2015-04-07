@@ -157,3 +157,13 @@ association CarriedProducts between
   Order [1] role order
   Product [*] role products
 end
+
+constraints
+
+-- A un moment au plus un drone peut interagir avec un Receptacle
+-- Il existe au moins un Receptacle voisin de lentrepot
+— Pour chaque réceptacle, il existe un chemin partant de l’entrepôt et menant à
+ce réceptacle en passant par un ensemble d’autres réceptacles tel que la distance
+entre tout couple d’éléments consécutifs de ce chemin soit inférieure ou égale à 2.
+—- A un moment donne, il y a au plus un drone a chaque intersection de la grille.
+
