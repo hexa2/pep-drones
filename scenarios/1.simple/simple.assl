@@ -1,0 +1,50 @@
+-- Init
+procedure init(gridWidth : Integer, gridHeight : Integer, DNB : Integer, RNB : Integer)
+var drones : Sequence(Drone),
+    targets : Sequence(Target),
+    nodes : Sequence(Node),
+    warehouse : Warehouse,
+    globalState : GlobalState,
+    xRange : Sequence(Integer),
+    yRange : Sequence(Integer);
+begin
+  -- Create objects
+  drones := CreateN(Drone, [DNB]);
+  targets := CreateN(Target, [RNB]);
+  nodes := CreateN(Node, [gridWidth * gridHeight - RNB - 1]);
+  warehouse := Create(Warehouse);
+  globalState := Create(GlobalState);
+  xRange := [Sequence{1..gridWidth}];
+  yRange := [Sequence{1..gridHeight}];
+
+  -- Populate state
+  [globalState].DNB := [DNB];
+  [globalState].RNB := [RNB];
+  [globalState].elapsedTime := [0];
+
+  -- Populate grid
+  [warehouse].x := Try([xRange]);
+  [warehouse].y := Try([yRange]);
+  for target:Target in [targets]
+  begin
+    [target].x := Try([xRange]);
+    [target].y := Try([yRange]);
+    [target].RCAP := [0];
+    [target].state := [TargetState::Empty];
+  end;
+  for node:Node in [nodes]
+  begin
+    [node].x := Try([xRange]);
+    [node].y := Try([yRange]);
+  end;
+
+  -- Populate drones
+  for drone:Drone in [drones]
+  begin
+    [drone].DCAP := [0];
+    [drone].charge := [3];
+    [drone].pathIdx := [1];
+    [drone].state := [DroneState::Boarding];
+    [drone].isActing := [true];
+  end;
+end;
