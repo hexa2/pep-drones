@@ -1,43 +1,91 @@
-model drones
+model Drones
 
-abstract class Location
+class Node
 attributes
   x : Integer
   y : Integer
+operations
+  distanceWith(node : Node) : Integer
+  computePathTo(node : Node) : OrderedSet(Node)
 end
 
-class Warehouse < Location end
+class Warehouse < Node end
 
-class Drone < Location
+enum TargetState {reloading, recepting, empty}
+
+class Target < Node
 attributes
-  DCAP : Integer
-end
-
-class Order end
-
-class Receptacle < Location end
-attributes
+  state : TargetState
   RCAP : Integer
+operations
+  reloadDrone()
+  receiveOrder()
+  free()
 end
 
-association Ownership between
-  Warehouse [1] role owner
-  Drone [*] role drones
+enum DroneState {inWarehouse, charging, moving, delivering}
+
+class Drone
+attributes
+  state : DroneState
+  DCAP : Integer
+  charge : Integer
+  isActing : Boolean
+operations
+  next() : Node
+  doNothing()
+  move()
+  reload()
+  deliver()
+  goBackToWarehouse()
+  reloadInWarehouse()
+  exitWarehouse()
 end
 
-association Storage between
-  Warehouse [0..1] role storagePlace
-  Drone [*] role storedDrones
+enum OrderState {waiting, inProcess, done}
+
+class Order
+attributes
+  state : OrderState
+operations
+  load() : Integer
+  deliver()
+  associateTo(drone : Drone)
 end
 
-association OrderPosition between
-  Order [*] role orders
-  Receptacle [1] role position
+class Product
+attributes
+  weight : Integer
 end
 
-association OrderDrone between
-  Order [0..1] role order
-  Drone [1] role drone
+class GlobalState
+attributes
+  elapsedTime : Integer
+  DNB : Integer
+  RNB : Integer
+operations
+  init()
+  tick()
+end
+
+association Path between
+  Drone [0..1] role movingDrone
+  Node [*] role path ordered
+end
+
+association DroneLocation between
+  Node [1] role location
+  Drone [0..1] role drone
+end
+
+association OrderLocation between
+  Target [1] role location
+  Order [0] role orders
+end
+
+association CarriedProducts between
+  Order [1] role order
+  Product [*] role products
 end
 
 constraints
