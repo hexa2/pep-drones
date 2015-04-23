@@ -1,50 +1,29 @@
 model Drones
 
--- Enumerate States
-enum TargetState {Charging, Receiving, Empty}
-enum DroneState {Boarding, Charging, Moving, Delivering}
-enum OrderState {Waiting, InProcess, Done}
-
--- Classes
 class Node
 attributes
   x : Integer
   y : Integer
-
 operations
-  distanceWith(node : Node) : Integer =
-    -- Manhattan Distance
-    (x-node.x).abs() + (y-node.y).abs()
+  distanceWith(node : Node) : Integer
   computePathTo(node : Node) : OrderedSet(Node)
 end
 
 class Warehouse < Node end
 
+enum TargetState {reloading, recepting, empty}
+
 class Target < Node
 attributes
   state : TargetState
   RCAP : Integer
-
 operations
-  charge()
-  receive()
+  reloadDrone()
+  receiveOrder()
   free()
-
-statemachines
-  psm TargetStateMachine
-  states
-    Boot:initial
-    Charging
-    Receiving
-    Empty
-  transitions
-    Boot -> Empty {create}
-    Empty -> Receiving {receive()}
-    Receiving -> Charging {charge()}
-    Charging -> Empty {free()}
-    Empty -> Charging {charge()}
-  end
 end
+
+enum DroneState {inWarehouse, charging, moving, delivering}
 
 class Drone
 attributes
@@ -52,69 +31,26 @@ attributes
   DCAP : Integer
   charge : Integer
   isActing : Boolean
-  pathIdx : Integer
-
 operations
-  next() : Node =
-    -- If it has an order in progress
-    if(self.orders->exists(o|o.state=OrderState::InProcess))
-    then
-      -- Move forward to the next node in path
-      self.path->at((self.pathIdx+1).min(self.path->size()))
-    else
-      -- Move backwards to the previous node in path
-      self.path->at(1.max(self.pathIdx-1))
-    endif
+  next() : Node
   doNothing()
   move()
-  charge()
+  reload()
   deliver()
-  board()
-
-statemachines
-  psm DroneStateMachine
-  states
-    Boot:initial
-    Boarding
-    Moving
-    Charging
-    Delivering
-  transitions
-    Boot -> Boarding {create}
-    Boarding -> Moving {move()}
-    Moving -> Boarding {board()}
-    Boarding -> Charging {charge()}
-    Moving -> Charging {charge()}
-    Charging -> Moving {move()}
-    Moving -> Delivering {deliver()}
-    Delivering -> Moving {move()}
-    Delivering -> Charging {charge()}
-  end
+  goBackToWarehouse()
+  reloadInWarehouse()
+  exitWarehouse()
 end
 
-
+enum OrderState {waiting, inProcess, done}
 
 class Order
 attributes
   state : OrderState
-
 operations
   load() : Integer
   deliver()
   associateTo(drone : Drone)
-
-statemachines
-  psm OrderStateMachine
-  states
-    Boot:initial
-    Waiting
-    InProcess
-    Done
-  transitions
-    Boot -> Waiting {create}
-    Waiting -> InProcess {associateTo()}
-    InProcess -> Done {deliver()}
-  end
 end
 
 class Product
@@ -127,7 +63,6 @@ attributes
   elapsedTime : Integer
   DNB : Integer
   RNB : Integer
-
 operations
   init()
   tick()
@@ -143,11 +78,6 @@ association DroneLocation between
   Drone [0..1] role drone
 end
 
-association DroneOrders between
-  Drone [0..1] role drone
-  Order [*] role orders
-end
-
 association OrderLocation between
   Target [1] role location
   Order [0] role orders
@@ -160,10 +90,29 @@ end
 
 constraints
 
--- A un moment au plus un drone peut interagir avec un Receptacle
--- Il existe au moins un Receptacle voisin de lentrepot
-— Pour chaque réceptacle, il existe un chemin partant de l’entrepôt et menant à
-ce réceptacle en passant par un ensemble d’autres réceptacles tel que la distance
-entre tout couple d’éléments consécutifs de ce chemin soit inférieure ou égale à 2.
-—- A un moment donne, il y a au plus un drone a chaque intersection de la grille.
+--Il ya DNB drones et RNB receptacles
+context GlobalState
+inv droneNumbers : Drone.allInstances()->size() = self.DNB 
+inv targetNumbers : Target.allInstances()->size() = self.RNB 
+inv timeAlwaysPositive : self.elapsedTime >= 0 
+
+--A un moment au plus un drone peut interagir avec un Receptacle (fait dans les associations)
+--A un moment donné il y'a au plus un drone sur une case de la grille (fait dans les associations)
+
+context Drone
+inv batteryCapacity : self.charge <= 3
+inv positiveCapacity : self.DCAP <= 0 
+
+context WareHouse
+--Il existe au moins un receptacle voisin de l’entrepot.
+--Un receptacle ne peut etre sur la meme case qu'un warehouse
+
+
+--A un moment au plus un drone peut interagir avec un Receptacle
+--Il existe au moins un Receptacle voisin de lentrepot
+—-Pour chaque receptacle il existe un chemin partant de l’entrepot et menant a
+--ce receptacle en passant par un ensemble d’autres receptacles tel que la distance
+--entre tout couple d’elements consecutifs de ce chemin soit inferieure ou egale a 2.
+—-A un moment donne, il y a au plus un drone a chaque intersection de la grille.
+
 
