@@ -88,6 +88,7 @@ association CarriedProducts between
   Product [*] role products
 end
 
+
 constraints
 
 --Il ya DNB drones et RNB receptacles
@@ -114,5 +115,4 @@ context WareHouse
 --ce receptacle en passant par un ensemble d’autres receptacles tel que la distance
 --entre tout couple d’elements consecutifs de ce chemin soit inferieure ou egale a 2.
 —-A un moment donne, il y a au plus un drone a chaque intersection de la grille.
-
 

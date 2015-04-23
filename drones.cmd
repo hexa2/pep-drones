@@ -1,2 +1,0 @@
-reset
-open drones.use
