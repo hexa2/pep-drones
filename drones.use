@@ -95,24 +95,44 @@ constraints
 context GlobalState
 inv droneNumbers : Drone.allInstances()->size() = self.DNB 
 inv targetNumbers : Target.allInstances()->size() = self.RNB 
-inv timeAlwaysPositive : self.elapsedTime >= 0 
+inv positiveElapsedTime : self.elapsedTime >= 0 
 
 --A un moment au plus un drone peut interagir avec un Receptacle (fait dans les associations)
 --A un moment donné il y'a au plus un drone sur une case de la grille (fait dans les associations)
 
-context Drone
-inv batteryCapacity : self.charge <= 3
-inv positiveCapacity : self.DCAP <= 0 
+context Node
+inv positiveX : self.x >= 0
+inv positiveY : self.y >= 0
+-- Un noeud par case
+inv SingleNodePerCase : Node.allInstances()->select(n | n.x = self.x and n.y = self.y )->size() = 1
+-- Un Noeud possede entre 0 et 4 voisins
+inv successors : Node.allInstances()->select(n | (n.x = self.x - 1 and n.y = self.y) or (n.x = self.x+1 and n.y = self.y) or (n.x = self.x and n.y = self.y -1) or (n.x = self.y and n.y = self.y+1))->size()<=4
 
-context WareHouse
+context Drone
+inv batteryCapacity : self.charge <= 3 and self.charge>=0
+inv positiveCapacity : self.DCAP >= 0 
+
+context Order 
+
+context Product 
+inv positiveWeight : self.weight >= 0 
+
+context Target 
+inv positiveRCAP : self.RCAP >= 0 
+--Condition 14 séparée en deux
+--Deux receptacles sont séparés d'une distance inférieure ou egale a 2 (receptacle actuel et un autre)
+--Il existe un receptacle a une distance de deux de l'entrepot
+inv targetDistance : Target.allInstances()->exists(r| ((self.x-r.x).abs()+(self.y-r.y).abs() < 2) )
+
+context Warehouse
+--Il existe un entrepot
+inv oneWarehouse : Warehouse.allInstances()->size() = 1 
 --Il existe au moins un receptacle voisin de l’entrepot.
+inv targetCloseToWareHouse : Target.allInstances()->exists(r | (self.x-r.x).abs()+(self.y-r.y).abs() = 1 )
 --Un receptacle ne peut etre sur la meme case qu'un warehouse
+inv wareHouseDifferentFromTarget : Target.allInstances()->forAll(r| not(self.x=r.x and self.y=r.y) )
 
 
 --A un moment au plus un drone peut interagir avec un Receptacle
---Il existe au moins un Receptacle voisin de lentrepot
-—-Pour chaque receptacle il existe un chemin partant de l’entrepot et menant a
---ce receptacle en passant par un ensemble d’autres receptacles tel que la distance
---entre tout couple d’elements consecutifs de ce chemin soit inferieure ou egale a 2.
-—-A un moment donne, il y a au plus un drone a chaque intersection de la grille.
+--A un moment donne il y a au plus un drone a chaque intersection de la grille.
 
