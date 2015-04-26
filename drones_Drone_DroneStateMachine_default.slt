@@ -10,15 +10,6 @@
     <showrolenames>false</showrolenames>
     <showgrid>false</showgrid>
   </diagramOptions>
-  <node id="Moving" sizeCalculated="true" type="StateNode">
-    <name>Moving</name>
-    <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyFixed">
-      <x>317.84802426974125</x>
-      <y>21.198317973371843</y>
-    </strategy>
-    <showInvariant>true</showInvariant>
-    <hidden>false</hidden>
-  </node>
   <node id="Boarding" sizeCalculated="true" type="StateNode">
     <name>Boarding</name>
     <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyFixed">
@@ -33,6 +24,15 @@
     <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyFixed">
       <x>131.95753553201104</x>
       <y>237.1446795895858</y>
+    </strategy>
+    <showInvariant>true</showInvariant>
+    <hidden>false</hidden>
+  </node>
+  <node id="Moving" sizeCalculated="true" type="StateNode">
+    <name>Moving</name>
+    <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyFixed">
+      <x>317.84802426974125</x>
+      <y>21.198317973371843</y>
     </strategy>
     <showInvariant>true</showInvariant>
     <hidden>false</hidden>
@@ -124,63 +124,11 @@
     </Transitions>
   </edge>
   <edge type="Transition">
-    <source>Delivering</source>
-    <target>Moving</target>
-    <name>move()/</name>
-    <waypoints>
-      <edgeproperty id="transition::Delivering::Moving::::WayPoint::0"
-        sizeCalculated="true" type="WayPoint" userDefined="false" visible="true">
-        <name>0</name>
-        <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyAttachedIntersection">
-          <userOffsetX>0.0</userOffsetX>
-          <userOffsetY>0.0</userOffsetY>
-        </strategy>
-        <id>0</id>
-        <specialid>1</specialid>
-        <hidden>false</hidden>
-      </edgeproperty>
-      <edgeproperty id="transition::Delivering::Moving::::WayPoint::1"
-        sizeCalculated="true" type="WayPoint" userDefined="false" visible="true">
-        <name>1</name>
-        <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyAttachedIntersection">
-          <userOffsetX>0.0</userOffsetX>
-          <userOffsetY>0.0</userOffsetY>
-        </strategy>
-        <id>1</id>
-        <specialid>2</specialid>
-        <hidden>false</hidden>
-      </edgeproperty>
-    </waypoints>
-    <hidden>false</hidden>
-    <Transitions>
-      <Transition>
-        <trigger>move()</trigger>
-        <guard/>
-        <post/>
-        <edgeproperty id="move()/" sizeCalculated="true"
-          type="TransitionLabel" userDefined="false" visible="true">
-          <name>move()/</name>
-          <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyInBetween">
-            <userOffsetX>0.0</userOffsetX>
-            <userOffsetY>0.0</userOffsetY>
-            <offsetX>0.0</offsetX>
-            <offsetY>10.0</offsetY>
-            <related length="2">
-              <related0>transition::Delivering::Moving::::WayPoint::0</related0>
-              <related1>transition::Delivering::Moving::::WayPoint::1</related1>
-            </related>
-          </strategy>
-          <hidden>false</hidden>
-        </edgeproperty>
-      </Transition>
-    </Transitions>
-  </edge>
-  <edge type="Transition">
     <source>Moving</source>
-    <target>Delivering</target>
-    <name>deliver()/</name>
+    <target>Charging</target>
+    <name>charge()/</name>
     <waypoints>
-      <edgeproperty id="transition::Moving::Delivering::::WayPoint::0"
+      <edgeproperty id="transition::Moving::Charging::::WayPoint::0"
         sizeCalculated="true" type="WayPoint" userDefined="false" visible="true">
         <name>0</name>
         <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyAttachedIntersection">
@@ -191,7 +139,7 @@
         <specialid>1</specialid>
         <hidden>false</hidden>
       </edgeproperty>
-      <edgeproperty id="transition::Moving::Delivering::::WayPoint::1"
+      <edgeproperty id="transition::Moving::Charging::::WayPoint::1"
         sizeCalculated="true" type="WayPoint" userDefined="false" visible="true">
         <name>1</name>
         <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyAttachedIntersection">
@@ -206,20 +154,20 @@
     <hidden>false</hidden>
     <Transitions>
       <Transition>
-        <trigger>deliver()</trigger>
+        <trigger>charge()</trigger>
         <guard/>
         <post/>
-        <edgeproperty id="deliver()/" sizeCalculated="true"
+        <edgeproperty id="charge()/" sizeCalculated="true"
           type="TransitionLabel" userDefined="false" visible="true">
-          <name>deliver()/</name>
+          <name>charge()/</name>
           <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyInBetween">
             <userOffsetX>0.0</userOffsetX>
             <userOffsetY>0.0</userOffsetY>
             <offsetX>0.0</offsetX>
             <offsetY>10.0</offsetY>
             <related length="2">
-              <related0>transition::Moving::Delivering::::WayPoint::0</related0>
-              <related1>transition::Moving::Delivering::::WayPoint::1</related1>
+              <related0>transition::Moving::Charging::::WayPoint::0</related0>
+              <related1>transition::Moving::Charging::::WayPoint::1</related1>
             </related>
           </strategy>
           <hidden>false</hidden>
@@ -281,10 +229,10 @@
   </edge>
   <edge type="Transition">
     <source>Moving</source>
-    <target>Charging</target>
-    <name>charge()/</name>
+    <target>Delivering</target>
+    <name>deliver()/</name>
     <waypoints>
-      <edgeproperty id="transition::Moving::Charging::::WayPoint::0"
+      <edgeproperty id="transition::Moving::Delivering::::WayPoint::0"
         sizeCalculated="true" type="WayPoint" userDefined="false" visible="true">
         <name>0</name>
         <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyAttachedIntersection">
@@ -295,7 +243,7 @@
         <specialid>1</specialid>
         <hidden>false</hidden>
       </edgeproperty>
-      <edgeproperty id="transition::Moving::Charging::::WayPoint::1"
+      <edgeproperty id="transition::Moving::Delivering::::WayPoint::1"
         sizeCalculated="true" type="WayPoint" userDefined="false" visible="true">
         <name>1</name>
         <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyAttachedIntersection">
@@ -310,72 +258,20 @@
     <hidden>false</hidden>
     <Transitions>
       <Transition>
-        <trigger>charge()</trigger>
+        <trigger>deliver()</trigger>
         <guard/>
         <post/>
-        <edgeproperty id="charge()/" sizeCalculated="true"
+        <edgeproperty id="deliver()/" sizeCalculated="true"
           type="TransitionLabel" userDefined="false" visible="true">
-          <name>charge()/</name>
+          <name>deliver()/</name>
           <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyInBetween">
             <userOffsetX>0.0</userOffsetX>
             <userOffsetY>0.0</userOffsetY>
             <offsetX>0.0</offsetX>
             <offsetY>10.0</offsetY>
             <related length="2">
-              <related0>transition::Moving::Charging::::WayPoint::0</related0>
-              <related1>transition::Moving::Charging::::WayPoint::1</related1>
-            </related>
-          </strategy>
-          <hidden>false</hidden>
-        </edgeproperty>
-      </Transition>
-    </Transitions>
-  </edge>
-  <edge type="Transition">
-    <source>Delivering</source>
-    <target>Charging</target>
-    <name>charge()/</name>
-    <waypoints>
-      <edgeproperty id="transition::Delivering::Charging::::WayPoint::0"
-        sizeCalculated="true" type="WayPoint" userDefined="false" visible="true">
-        <name>0</name>
-        <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyAttachedIntersection">
-          <userOffsetX>0.0</userOffsetX>
-          <userOffsetY>0.0</userOffsetY>
-        </strategy>
-        <id>0</id>
-        <specialid>1</specialid>
-        <hidden>false</hidden>
-      </edgeproperty>
-      <edgeproperty id="transition::Delivering::Charging::::WayPoint::1"
-        sizeCalculated="true" type="WayPoint" userDefined="false" visible="true">
-        <name>1</name>
-        <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyAttachedIntersection">
-          <userOffsetX>0.0</userOffsetX>
-          <userOffsetY>0.0</userOffsetY>
-        </strategy>
-        <id>1</id>
-        <specialid>2</specialid>
-        <hidden>false</hidden>
-      </edgeproperty>
-    </waypoints>
-    <hidden>false</hidden>
-    <Transitions>
-      <Transition>
-        <trigger>charge()</trigger>
-        <guard/>
-        <post/>
-        <edgeproperty id="charge()/" sizeCalculated="true"
-          type="TransitionLabel" userDefined="false" visible="true">
-          <name>charge()/</name>
-          <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyInBetween">
-            <userOffsetX>0.0</userOffsetX>
-            <userOffsetY>0.0</userOffsetY>
-            <offsetX>0.0</offsetX>
-            <offsetY>10.0</offsetY>
-            <related length="2">
-              <related0>transition::Delivering::Charging::::WayPoint::0</related0>
-              <related1>transition::Delivering::Charging::::WayPoint::1</related1>
+              <related0>transition::Moving::Delivering::::WayPoint::0</related0>
+              <related1>transition::Moving::Delivering::::WayPoint::1</related1>
             </related>
           </strategy>
           <hidden>false</hidden>
@@ -480,6 +376,110 @@
             <related length="2">
               <related0>transition::Moving::Boarding::::WayPoint::0</related0>
               <related1>transition::Moving::Boarding::::WayPoint::1</related1>
+            </related>
+          </strategy>
+          <hidden>false</hidden>
+        </edgeproperty>
+      </Transition>
+    </Transitions>
+  </edge>
+  <edge type="Transition">
+    <source>Delivering</source>
+    <target>Moving</target>
+    <name>move()/</name>
+    <waypoints>
+      <edgeproperty id="transition::Delivering::Moving::::WayPoint::0"
+        sizeCalculated="true" type="WayPoint" userDefined="false" visible="true">
+        <name>0</name>
+        <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyAttachedIntersection">
+          <userOffsetX>0.0</userOffsetX>
+          <userOffsetY>0.0</userOffsetY>
+        </strategy>
+        <id>0</id>
+        <specialid>1</specialid>
+        <hidden>false</hidden>
+      </edgeproperty>
+      <edgeproperty id="transition::Delivering::Moving::::WayPoint::1"
+        sizeCalculated="true" type="WayPoint" userDefined="false" visible="true">
+        <name>1</name>
+        <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyAttachedIntersection">
+          <userOffsetX>0.0</userOffsetX>
+          <userOffsetY>0.0</userOffsetY>
+        </strategy>
+        <id>1</id>
+        <specialid>2</specialid>
+        <hidden>false</hidden>
+      </edgeproperty>
+    </waypoints>
+    <hidden>false</hidden>
+    <Transitions>
+      <Transition>
+        <trigger>move()</trigger>
+        <guard/>
+        <post/>
+        <edgeproperty id="move()/" sizeCalculated="true"
+          type="TransitionLabel" userDefined="false" visible="true">
+          <name>move()/</name>
+          <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyInBetween">
+            <userOffsetX>0.0</userOffsetX>
+            <userOffsetY>0.0</userOffsetY>
+            <offsetX>0.0</offsetX>
+            <offsetY>10.0</offsetY>
+            <related length="2">
+              <related0>transition::Delivering::Moving::::WayPoint::0</related0>
+              <related1>transition::Delivering::Moving::::WayPoint::1</related1>
+            </related>
+          </strategy>
+          <hidden>false</hidden>
+        </edgeproperty>
+      </Transition>
+    </Transitions>
+  </edge>
+  <edge type="Transition">
+    <source>Delivering</source>
+    <target>Charging</target>
+    <name>charge()/</name>
+    <waypoints>
+      <edgeproperty id="transition::Delivering::Charging::::WayPoint::0"
+        sizeCalculated="true" type="WayPoint" userDefined="false" visible="true">
+        <name>0</name>
+        <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyAttachedIntersection">
+          <userOffsetX>0.0</userOffsetX>
+          <userOffsetY>0.0</userOffsetY>
+        </strategy>
+        <id>0</id>
+        <specialid>1</specialid>
+        <hidden>false</hidden>
+      </edgeproperty>
+      <edgeproperty id="transition::Delivering::Charging::::WayPoint::1"
+        sizeCalculated="true" type="WayPoint" userDefined="false" visible="true">
+        <name>1</name>
+        <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyAttachedIntersection">
+          <userOffsetX>0.0</userOffsetX>
+          <userOffsetY>0.0</userOffsetY>
+        </strategy>
+        <id>1</id>
+        <specialid>2</specialid>
+        <hidden>false</hidden>
+      </edgeproperty>
+    </waypoints>
+    <hidden>false</hidden>
+    <Transitions>
+      <Transition>
+        <trigger>charge()</trigger>
+        <guard/>
+        <post/>
+        <edgeproperty id="charge()/" sizeCalculated="true"
+          type="TransitionLabel" userDefined="false" visible="true">
+          <name>charge()/</name>
+          <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyInBetween">
+            <userOffsetX>0.0</userOffsetX>
+            <userOffsetY>0.0</userOffsetY>
+            <offsetX>0.0</offsetX>
+            <offsetY>10.0</offsetY>
+            <related length="2">
+              <related0>transition::Delivering::Charging::::WayPoint::0</related0>
+              <related1>transition::Delivering::Charging::::WayPoint::1</related1>
             </related>
           </strategy>
           <hidden>false</hidden>
