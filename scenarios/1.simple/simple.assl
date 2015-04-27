@@ -45,6 +45,7 @@ begin
     [drone].pathIdx := [1];
     [drone].state := [DroneState::Boarding];
     [drone].isActing := [true];
+    Insert(DroneLocation, [warehouse], [drone]);
   end;
 end;
 
