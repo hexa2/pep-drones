@@ -35,9 +35,9 @@ open ../drones.use
 !insert (n13,d1) into DroneLocation
 !insert (n13,d2) into DroneLocation
 
-!insert (n14,o1) into OrderLocation
-!insert (n14,o2) into OrderLocation
-!insert (n23,o3) into OrderLocation
+!insert (n14,o1) into OrderProduct
+!insert (n14,o2) into OrderProduct
+!insert (n23,o3) into OrderProduct
 
 !insert (o1,p1) into CarriedProducts
 !insert (o1,p2) into CarriedProducts

@@ -148,9 +148,9 @@ association DroneOrders between
   Order [*] role orders
 end
 
-association OrderLocation between
+association OrderProduct between
   Target [1] role location
-  Order [0] role orders
+  Order [*] role orders
 end
 
 association CarriedProducts between
@@ -177,12 +177,13 @@ inv SingleNodePerCase : Node.allInstances()->select(n | n.x = self.x and n.y = s
 -- Un Noeud possede entre 0 et 4 voisins
 inv successors : Node.allInstances()->select(n | (n.x = self.x - 1 and n.y = self.y) or (n.x = self.x+1 and n.y = self.y) or (n.x = self.x and n.y = self.y -1) or (n.x = self.y and n.y = self.y+1))->size()<=4
 --Un drone par case sauf pour la warehouse
-inv oneDronePerNode : not(self.oclIsTypeOf(Warehouse)) and self.drones->size() = 1 
+inv oneDronePerNode : not(self.oclIsTypeOf(Warehouse)) implies self.drones->size() <= 1 
 
 
 context Drone
 inv batteryCapacity : self.charge <= 3 and self.charge>=0
 inv positiveCapacity : self.DCAP >= 0 
+inv ordersNotHeavierThanCapacity : self.orders.products.weight->sum() <= self.DCAP
 
 context Order 
 
