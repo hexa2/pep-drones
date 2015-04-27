@@ -194,8 +194,8 @@ context Target
 inv positiveRCAP : self.RCAP >= 0 
 --Condition 14 séparée en deux
 --Deux receptacles sont séparés d'une distance inférieure ou egale a 2 (receptacle actuel et un autre)
---Il existe un receptacle a une distance de deux de l'entrepot
-inv targetDistance : Target.allInstances()->exists(r| ((self.x-r.x).abs()+(self.y-r.y).abs() <= 2) )
+--Il existe un receptacle a une distance de deux de l'entrepot (faite plutard)
+inv targetDistance : Target.allInstances()->excluding(self)->exists(r| ((self.x-r.x).abs()+(self.y-r.y).abs() <= 2) ) or Target.allInstances()->size() = 1
 
 context Warehouse
 --Il existe un entrepot
