@@ -6,7 +6,11 @@ var drones : Sequence(Drone),
     warehouse : Warehouse,
     globalState : GlobalState,
     xRange : Sequence(Integer),
-    yRange : Sequence(Integer);
+    yRange : Sequence(Integer),
+    products : Sequence(Product),
+    order : Order,
+    mytarget : Target,
+    nbProducts : Integer;
 
 begin
     -- Create objects
@@ -52,26 +56,36 @@ begin
       [drone].isActing := [false];
       Insert(DroneLocation, [warehouse], [drone]);
     end;
-end;
 
-procedure newOrder()
-var products : Sequence(Product),
-    order : Order,
-    target : Target,
-    nbProducts : Integer;
+    
 
-begin
-  nbProducts := Any([Sequence{1..5}]);
-  order := Create(Order);
-  products := CreateN(Product, [nbProducts] );
-  target := Any([Target.allInstances()->asSequence()]);
+    -- New Order
+    nbProducts := Any([Sequence{1..3}]);
+    order := Create(Order);
+    products := CreateN(Product, [nbProducts] );
+    mytarget := Any([Target.allInstances()->asSequence()]);
 
-  for product:Product in [products]
-  begin
-    [product].weight := Any([Sequence{0..20}]);
-    Insert(CarriedProducts, [order], [product]);
-  end;
+    for product:Product in [products]
+    begin
+      [product].weight := Any([Sequence{0..20}]);
+      Insert(CarriedProducts, [order], [product]);
+    end;
 
-  [order].state := [OrderState::Waiting];
-  Insert(OrderProduct, [target], [order]);
+    [order].state := [OrderState::Waiting];
+    Insert(OrderProduct, [mytarget], [order]);
+
+    -- New Order
+    nbProducts := Any([Sequence{1..3}]);
+    order := Create(Order);
+    products := CreateN(Product, [nbProducts] );
+    mytarget := Any([Target.allInstances()->asSequence()]);
+
+    for product:Product in [products]
+    begin
+      [product].weight := Any([Sequence{0..20}]);
+      Insert(CarriedProducts, [order], [product]);
+    end;
+
+    [order].state := [OrderState::Waiting];
+    Insert(OrderProduct, [mytarget], [order]);
 end;
