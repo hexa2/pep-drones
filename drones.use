@@ -199,7 +199,7 @@ inv targetDistance : Target.allInstances()->excluding(self)->exists(r| ((self.x-
 
 context Warehouse
 --Il existe un entrepot
-inv oneWarehouse : Warehouse.allInstances()->size() = 1 
+inv oneWarehouse : Warehouse.allInstances()->size() = 1
 --Il existe au moins un receptacle voisin de l’entrepot.
 inv targetCloseToWareHouse : Target.allInstances()->exists(r | (self.x-r.x).abs()+(self.y-r.y).abs() = 1 )
 --Un receptacle ne peut etre sur la meme case qu'un warehouse
@@ -208,3 +208,52 @@ inv wareHouseDifferentFromTarget : Target.allInstances()->forAll(r| not(self.x=r
 
 --A un moment au plus un drone peut interagir avec un Receptacle
 --A un moment donne il y a au plus un drone a chaque intersection de la grille.
+
+-- Operations
+
+-- Etat initial du systeme
+context GlobalState::init()
+post dronesInWarehouse: let w=Warehouse.allInstances().any(true) in Drone.allInstances()->forAll(d | d.location = w)
+post initTime: self.elapsedTime = 0
+post actingDrones: Drone.allInstances()->forAll(d | d.isActing)
+
+-- Avance dans le temps
+context GlobalState::tick()
+-- Les drones sont actifs avant de bouger
+pre actingDrones: Drone.allInstances()->forAll(d | d.isActing)
+post incTime: self.elapsedTime = self.elapsedTime@pre + 1
+-- Les drones ont bougé, ils sont inactifs
+post idleDrones: Drone.allInstances()->forAll(d | not d.isActing)
+
+-- Actions du drone
+
+context Drone::doNothing()
+post sameState: self = self@pre
+
+context Drone::move()
+pre mustBeActing: self.isActing
+pre mustHaveCharge: self.charge > 0
+pre emptyNextNode: self.next().drones->size = 0
+pre mustBeMoving: self.state = DroneState::Moving
+post hasMovedToNext: self.location = self@pre.next()
+post consumeCharge: self.charge = self.charge@pre - 1
+
+context Drone::charge()
+pre mustBeActing: self.isActing
+pre mustBeUnderMaxCharge: self.charge < 3
+pre mustbeonTarget: Target.allInstances()->exists(t | t = self.location)
+post mustBeCharging: self.state = DroneState::Charging
+post incCharge: self.charge = self.charge@pre + 1
+
+context Drone::deliver()
+pre mustBeActing: self.isActing
+pre inDeliveringLocation: self.orders->exists(o | o.state = OrderState::InProcess and o.location = self.location)
+post mustBeDelivering: self.state = DroneState::Delivering
+post updateDeliveryStatus: self.orders->exists(o | o.state@pre = OrderState::InProcess and o.location = self.location and o.state = OrderState::Done)
+
+context Drone::board()
+pre mustBeActing: self.isActing
+pre inWarehouse: Warehouse.allInstances()->exists(w | self.location = w)
+post mustBeBoarding: self.state = DroneState::Boarding
+post mustHaveChangedOrderState: self.orders->exists(o | o.state = OrderState::InProcess and o.state@pre = OrderState::Waiting)
+

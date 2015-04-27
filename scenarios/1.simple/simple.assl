@@ -52,7 +52,6 @@ begin
       [drone].isActing := [false];
       Insert(DroneLocation, [warehouse], [drone]);
     end;
-
 end;
 
 procedure newOrder()
