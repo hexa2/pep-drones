@@ -23,7 +23,7 @@ operations
   free()
 end
 
-enum DroneState {inWarehouse, charging, moving, delivering}
+enum DroneState {boarding, charging, moving, delivering}
 
 class Drone
 attributes
@@ -31,6 +31,7 @@ attributes
   DCAP : Integer
   charge : Integer
   isActing : Boolean
+  pathIdx: Integer
 operations
   next() : Node
   doNothing()

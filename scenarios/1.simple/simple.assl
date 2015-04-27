@@ -29,7 +29,7 @@ begin
     [target].x := Try([xRange]);
     [target].y := Try([yRange]);
     [target].RCAP := [0];
-    [target].state := [TargetState::Empty];
+    [target].state := [TargetState::empty];
   end;
   for node:Node in [nodes]
   begin
@@ -43,7 +43,7 @@ begin
     [drone].DCAP := [0];
     [drone].charge := [3];
     [drone].pathIdx := [1];
-    [drone].state := [DroneState::Boarding];
+    [drone].state := [DroneState::boarding];
     [drone].isActing := [true];
   end;
 end;
@@ -56,7 +56,7 @@ begin
   order := Create(Order);
   product := Create(Product);
 
-  [order].state := [OrderState::Waiting];
+  [order].state := [OrderState::waiting];
   target := Any([Target.allInstances()->asSequence()]);
   Insert(OrderLocation, [target], [order]);
 
