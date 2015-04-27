@@ -140,7 +140,7 @@ end
 
 association DroneLocation between
   Node [1] role location
-  Drone [*] role drone
+  Drone [*] role drones
 end
 
 association DroneOrders between
