@@ -122,7 +122,7 @@ inv positiveRCAP : self.RCAP >= 0
 --Condition 14 séparée en deux
 --Deux receptacles sont séparés d'une distance inférieure ou egale a 2 (receptacle actuel et un autre)
 --Il existe un receptacle a une distance de deux de l'entrepot
-inv targetDistance : Target.allInstances()->exists(r| ((self.x-r.x).abs()+(self.y-r.y).abs() < 2) )
+inv targetDistance : Target.allInstances()->exists(r| ((self.x-r.x).abs()+(self.y-r.y).abs() <= 2) )
 
 context Warehouse
 --Il existe un entrepot
@@ -135,4 +135,3 @@ inv wareHouseDifferentFromTarget : Target.allInstances()->forAll(r| not(self.x=r
 
 --A un moment au plus un drone peut interagir avec un Receptacle
 --A un moment donne il y a au plus un drone a chaque intersection de la grille.
-
