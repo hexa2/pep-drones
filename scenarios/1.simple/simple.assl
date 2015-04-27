@@ -59,7 +59,7 @@ begin
 
   [order].state := [OrderState::Waiting];
   target := Any([Target.allInstances()->asSequence()]);
-  Insert(OrderLocation, [target], [order]);
+  Insert(OrderProduct, [target], [order]);
 
   [product].weight := [0];
 
