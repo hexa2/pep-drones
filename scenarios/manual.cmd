@@ -44,6 +44,9 @@ open ../drones.use
 !insert (o2,p3) into CarriedProducts
 !insert (o3,p4) into CarriedProducts
 
+!insert(d1,o1) into DroneOrders
+!insert(d1,o2) into DroneOrders
+!insert(d2,o3) into DroneOrders
 
 !set g.elapsedTime := 0
 !set g.DNB := 2
